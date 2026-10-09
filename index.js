@@ -22,6 +22,7 @@ const paymentRoutes = require('./src/routes/paymentRoutes');
 const purchaseOrderRoutes = require('./src/routes/purchaseOrderRoutes');
 const goodsReceiptRoutes = require('./src/routes/goodsReceiptRoutes');
 const reportRoutes = require('./src/routes/reportRoutes');
+const expenseSessionRoutes = require('./src/routes/expenseSessionRoutes');
 
 
 const { startOfPktDay } = require('./src/utils/dates');
@@ -66,6 +67,7 @@ app.use('/api/payments', protect, paymentRoutes);
 app.use('/api/purchase-orders', protect, purchaseOrderRoutes);
 app.use('/api/goods-receipts', protect, goodsReceiptRoutes);
 app.use('/api/reports', protect, reportRoutes);
+app.use('/api/expense-sessions', protect, expenseSessionRoutes);
 
 // Verify token
 app.get('/api/auth/verify-token', protect, (req, res) => {

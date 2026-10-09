@@ -48,7 +48,8 @@ const PurchaseOrderItemModel = require('./PurchaseOrderItem')(sequelize, DataTyp
 const GoodsReceiptModel = require('./GoodsReceipt')(sequelize, DataTypes);
 const GoodsReceiptItemModel = require('./GoodsReceiptItem')(sequelize, DataTypes);
 const SupplierLedgerModel = require('./SupplierLedger')(sequelize, DataTypes);
-
+const ExpenseSessionModel = require('./ExpenseSession')(sequelize, DataTypes);
+const ExpenseEntryModel   = require('./ExpenseEntry')(sequelize, DataTypes);
 
 // ============================================================
 // USER ASSOCIATIONS
@@ -71,6 +72,16 @@ BranchModel.belongsTo(UserModel, { foreignKey: 'created_by', as: 'creator' });
 BranchModel.hasMany(UserModel, { foreignKey: 'branch_id', as: 'users' });
 BranchModel.hasMany(InvoiceModel, { as: 'invoices', foreignKey: 'branch_id' });
 
+// ============================================================
+// EXPENSE SESSION ASSOCIATIONS
+// ============================================================
+ExpenseSessionModel.belongsTo(BranchModel, { foreignKey: 'branch_id', as: 'branch' });
+ExpenseSessionModel.belongsTo(UserModel,   { foreignKey: 'created_by', as: 'creator' });
+ExpenseSessionModel.hasMany(ExpenseEntryModel, { foreignKey: 'session_id', as: 'entries' });
+
+ExpenseEntryModel.belongsTo(ExpenseSessionModel, { foreignKey: 'session_id', as: 'session' });
+ExpenseEntryModel.belongsTo(SupplierModel,       { foreignKey: 'supplier_id', as: 'supplier' });
+ExpenseEntryModel.belongsTo(UserModel,           { foreignKey: 'created_by', as: 'creator' });
 
 // ============================================================
 // PRODUCT ASSOCIATIONS
@@ -404,6 +415,8 @@ const db = {
     GoodsReceipt: GoodsReceiptModel,
     GoodsReceiptItem: GoodsReceiptItemModel,
     SupplierLedger: SupplierLedgerModel,
+    ExpenseSession: ExpenseSessionModel,
+    ExpenseEntry:   ExpenseEntryModel,
 };
 
 module.exports = db;
